@@ -1,6 +1,10 @@
 package com.example.smartproject.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,16 +15,27 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long Id;
+
+    @NotBlank(message = "User Name can not be empty !!")
+    @Size(min=2, max=20, message = "User Name should be between 2 to 20 characters !!")
     private String name;
+
 //    email will become unique key
     @Column(unique = true)
+    @Email(regexp = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9+_-]+$")
     private String email;
+
+    @NotBlank(message = "password can not be empty !!")
+    @Size(min=5, max=15, message = "Password should be between 5 and 15")
     private String password;
     private String role;
+    @AssertTrue(message = "User is not active")
     private boolean status;
+
     private String imageUrl;
     @Column(length = 500)
-    private String Userdescription;
+    @NotBlank(message = "Description cannot be empty !!")
+    private String about;
 
 //    One (user) to Many(Contact)
 //    When user's data is saved, all user's contact will be saved
@@ -99,12 +114,12 @@ public class UserEntity {
         this.imageUrl = imageUrl;
     }
 
-    public String getDescription() {
-        return Userdescription;
+    public String getAbout() {
+        return about;
     }
 
-    public void setDescription(String Userdescription) {
-        this.Userdescription = Userdescription;
+    public void setAbout(String about) {
+        this.about = about;
     }
 
     @Override
@@ -117,7 +132,7 @@ public class UserEntity {
                 ", role='" + role + '\'' +
                 ", status=" + status +
                 ", imageUrl='" + imageUrl + '\'' +
-                ", Userdescription='" + Userdescription + '\'' +
+                ", about='" + about + '\'' +
                 ", contactEntities=" + contactEntities +
                 '}';
     }
